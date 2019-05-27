@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">UpiEstacionamiento</string>
+    <string name="title_atention">Atención</string>
+    <string name="title_accept">Aceptar</string>
+    <string name="title_exit">Salir</string>
+    <string name="title_qr">Oprime el boton para leer el código QR del estudiante como el que se muestra a continuación</string>
+    <string name="msg_permission">A partir de Android 6.0, se requiere aceptar permisos,\n\n ¿Desea continuar?</string>
+</resources>

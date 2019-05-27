@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Registrar">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="153dp"
+        android:layout_height="135dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="126dp"
+        android:layout_marginLeft="126dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="131dp"
+        android:layout_marginRight="131dp"
+        app:srcCompat="@drawable/park" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="416dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="112dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="267dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:text="Nombre" />
+
+        <EditText
+            android:id="@+id/boleta"
+            android:layout_width="267dp"
+            android:layout_height="50dp"
+            android:hint="Será tu nombre de usuario"
+            android:layout_gravity="center"
+            android:inputType="number"
+            android:maxLength="10" />
+
+        <TextView
+            android:layout_width="267dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:text="Contraseña" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="267dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:inputType="textPassword"
+            android:maxLength="20" />
+
+        <TextView
+            android:layout_width="267dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:text="Confirmar contraseña" />
+
+        <EditText
+            android:id="@+id/txtConfirmar"
+            android:layout_width="267dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:inputType="textPassword"
+            android:maxLength="20" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="#ffffff"
+            android:onClick="registrar"
+            android:text="Registrarse" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="cancelar"
+            android:background="#ffffff"
+            android:text="Cancelar"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+</RelativeLayout>
