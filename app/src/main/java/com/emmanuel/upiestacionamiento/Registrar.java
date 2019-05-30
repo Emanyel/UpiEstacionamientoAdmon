@@ -14,23 +14,30 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLTransactionRollbackException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Registrar extends AppCompatActivity {
+public class Registrar extends AppCompatActivity implements Response.Listener<JSONObject>, Response.ErrorListener {
     Intent intent;
     String nombre, contraseña, contra2, apaterno;
     int validar;
+    RequestQueue rq;
+    JsonRequest jr;
+    String URL = "https://upiicsapark.xyz/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
-
-
-
     }
 
 
@@ -51,8 +58,7 @@ public class Registrar extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Valida la contraseña", Toast.LENGTH_SHORT).show();
                 }else{
                     if(contraseña.equals(contra2)){
-                        registrarUsuario(nombre, contraseña, apaterno, "https://upiiparking.000webhostapp.com/");
-                        guardarContraseña(contraseña);
+                        iniciarSesion(nombre, apaterno, contraseña);
                     }else{
                         Toast.makeText(getApplicationContext(), "Las contraseñas no son iguales", Toast.LENGTH_SHORT).show();
                     }
@@ -63,51 +69,12 @@ public class Registrar extends AppCompatActivity {
 
     }
 
-    private void guardarContraseña(String contraseña) {
-        if(validar == 1){
-            Context context = getApplicationContext();
-            SharedPreferences sharedPreferences = getSharedPreferences("Login", context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("nombres", nombre);
-            editor.putString("password", contraseña);
-            editor.commit();
-        }else if(validar == 2){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            Toast.makeText(getApplicationContext(), "No puede hacer uso de la aplicación \n\n Lo sentimos mucho :(", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+    private void iniciarSesion(String nombre, String apaterno, String contraseña) {
+        String sum = "registrar.php?nombre="+nombre+"&apaterno="+apaterno+"&contraseña="+contraseña;
+        String urlComp = URL + sum;
+        jr = new JsonObjectRequest(Request.Method.GET, urlComp, null, this, this);
+        rq.add(jr);
 
-        }
-
-
-    private void registrarUsuario(final String nombre, final String contraseña, final String apaterno, String URL) {
-        String sum = "connect.php?names="+nombre+"&apaterno="+apaterno+"&pwd="+contraseña;
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL+sum, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                validar = 1;
-                Toast.makeText(getApplicationContext(), "Se registró, felicidades" , Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                validar=2;
-                Toast.makeText(getApplicationContext(), "No se pudo registrar el usuario" + error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("nombres",nombre);
-                params.put("apaterno", apaterno);
-                params.put("pwd", contraseña);
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
     }
 
     public void cancelar(View view) {
@@ -115,4 +82,48 @@ public class Registrar extends AppCompatActivity {
         startActivity(intent
         );
     }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(this, error.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResponse(JSONObject response) {
+        Users user = new Users();
+        validar = 1;
+        guardarPreferences(nombre, contraseña,  apaterno);
+        Toast.makeText(getApplicationContext(), "Usuario registrado", Toast.LENGTH_SHORT).show();
+        JSONArray jsonArray = response.optJSONArray("datos");
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = jsonArray.getJSONObject(0);
+            user.setNombre(jsonObject.optString("nombre"));
+            user.setContraseña(jsonObject.optString("contraseña"));
+            user.setApaterno(jsonObject.optString("apaterno"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void guardarPreferences(String nombre, String contraseña, String apaterno){
+            if(validar == 1){
+                Context context = getApplicationContext();
+                SharedPreferences sharedPreferences = getSharedPreferences("Admon", context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("nombre", nombre);
+                editor.putString("contraseña", contraseña);
+                editor.putString("apaterno", apaterno);
+                editor.commit();
+            }else if(validar == 2){
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), "Hubo un inconveniente Intenta más tarde", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+
 }
+

@@ -2,7 +2,9 @@ package com.emmanuel.upiestacionamiento;
 
 import android.app.Dialog;
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
@@ -34,10 +36,7 @@ public class QRShower extends AppCompatActivity implements ZXingScannerView.Resu
 
 
     private ZXingScannerView escanerView;
-    TextView info;
-    ImageView close;
     Button aceptar;
-    String URL = "https://upiicsapark.xyz/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,36 +70,9 @@ public class QRShower extends AppCompatActivity implements ZXingScannerView.Resu
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        regstrarEntrada();
+                        Toast.makeText(getApplicationContext(), "Registrado", Toast.LENGTH_SHORT).show();
                     }
                 }).show();
         escanerView.resumeCameraPreview(this); //CIERRA LA VENTANA Y VUELVE  ALA ANTERIOR
-    }
-
-    private void regstrarEntrada(String URL) {
-        final String boleta = "2016601495", folio="nas456";
-        final String validador = "dentro";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(), "Registrado" + response, Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        })
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parametros = new HashMap<String, String>();
-                parametros.put("boleta", boleta);
-                parametros.put("folio", folio);
-                return parametros;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
     }
 }
