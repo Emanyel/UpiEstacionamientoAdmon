@@ -41,13 +41,22 @@
             android:text="Nombre" />
 
         <EditText
-            android:id="@+id/boleta"
+            android:id="@+id/nombre"
             android:layout_width="267dp"
             android:layout_height="50dp"
             android:hint="Será tu nombre de usuario"
             android:layout_gravity="center"
             android:inputType="number"
             android:maxLength="10" />
+        <TextView
+            android:layout_width="267dp"
+            android:layout_height="30dp"
+            android:text="Apellido Paterno"/>
+        <EditText
+            android:layout_width="267dp"
+            android:id="@+id/apaterno"
+            android:layout_height="50dp"
+            android:hint="Solo tu apellido paterno"/>
 
         <TextView
             android:layout_width="267dp"

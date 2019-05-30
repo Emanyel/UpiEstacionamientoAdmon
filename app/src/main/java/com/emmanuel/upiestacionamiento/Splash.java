@@ -63,7 +63,7 @@ public class Splash extends AppCompatActivity {
 
         int hasWritePermission = activity.checkSelfPermission(Write);
         int hasInternetPermission = activity.checkSelfPermission(Internet);
-        int hasReadPermisison = activity.checkSelfPermission(Read);
+        int hasReadPermission = activity.checkSelfPermission(Read);
         int hasCameraPermission = activity.checkSelfPermission(Camera);
 
         List<String> permissions = new ArrayList<>();
@@ -73,10 +73,10 @@ public class Splash extends AppCompatActivity {
         if (hasInternetPermission != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Internet);
         }
-        if (hasInternetPermission != PackageManager.PERMISSION_GRANTED) {
+        if (hasReadPermission != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Read);
         }
-        if (hasInternetPermission != PackageManager.PERMISSION_GRANTED) {
+        if (hasCameraPermission != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Camera);
         }
         if (!permissions.isEmpty()) {
@@ -119,6 +119,7 @@ public class Splash extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         int hasWritePermission = activity.checkSelfPermission(Write);
+        int hasInternetPermission = activity.checkSelfPermission(Internet);
         int hasReadPermission = activity.checkSelfPermission(Read);
         int hasCameraPermission = activity.checkSelfPermission(Camera);
         boolean move = true;
@@ -129,6 +130,9 @@ public class Splash extends AppCompatActivity {
             move=false;
         }
         if(hasCameraPermission != 0) {
+            move=false;
+        }
+        if(hasInternetPermission != 0){
             move=false;
         }
 
